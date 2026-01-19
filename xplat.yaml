@@ -3,7 +3,7 @@
 # Uses Polyform for 3D geometry and splat operations
 
 name: plat-splat
-version: 0.1.0
+version: v0.1.0
 description: 3D Gaussian Splat processing with Polyform
 author: joeblew999
 license: MIT
