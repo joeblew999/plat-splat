@@ -87,7 +87,7 @@ tasks:
     deps: [src:clone]
     cmds:
       - '{{.XPLAT}} os mkdir -p {{.BIN_DIR}}'
-      - '{{if eq OS "windows"}}Push-Location "{{.SRC_DIR}}"; go build -o "{{.BIN_PATH}}" ./cmd/polyform; Pop-Location{{else}}cd "{{.SRC_DIR}}" && go build -o "{{.BIN_PATH}}" ./cmd/polyform{{end}}'
+      - go build -C "{{.SRC_DIR}}" -o "{{.BIN_PATH}}" ./cmd/polyform
       - '{{.XPLAT}} os version-file -f {{.BIN_DIR}}/.version -s {{.VERSION}}'
     status:
       - '{{if eq OS "windows"}}Test-Path "{{.BIN_PATH}}"{{else}}test -f "{{.BIN_PATH}}"{{end}}'
@@ -154,13 +154,13 @@ tasks:
     desc: Run polyform tests
     deps: [src:clone]
     cmds:
-      - '{{if eq OS "windows"}}Push-Location "{{.SRC_DIR}}"; go test -v ./...; Pop-Location{{else}}cd "{{.SRC_DIR}}" && go test -v ./...{{end}}'
+      - go test -C "{{.SRC_DIR}}" -v ./...
 
   deps:
     desc: Download polyform dependencies
     deps: [src:clone]
     cmds:
-      - '{{if eq OS "windows"}}Push-Location "{{.SRC_DIR}}"; go mod download; Pop-Location{{else}}cd "{{.SRC_DIR}}" && go mod download{{end}}'
+      - go mod download -C "{{.SRC_DIR}}"
 
   # ===========================================================================
   # Clean - Remove generated artifacts
