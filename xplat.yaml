@@ -1,0 +1,54 @@
+# plat-splat: 3D Gaussian Splat processing with Polyform
+#
+# Uses Polyform for 3D geometry and splat operations
+
+name: plat-splat
+version: 0.1.0
+description: 3D Gaussian Splat processing with Polyform
+author: joeblew999
+license: MIT
+
+# Language for Taskfile generation
+language: go
+
+# Binary from external source (polyform)
+binary:
+  name: polyform
+  main: ./cmd/polyform
+  run_args: edit  # User-facing: opens browser
+  service_run_args: edit -launch-browser=false  # Service mode: no browser
+  source:
+    repo: https://github.com/EliCDavis/polyform.git
+    version: v0.35.0
+
+# Taskfile for development commands
+taskfile:
+  path: Taskfile.yml
+
+# Polyform runs as a service for the node editor UI
+processes:
+  polyform:
+    command: task polyform:run
+    port: 8080
+    readiness:
+      initial_delay: 3
+      period: 5
+
+env:
+  optional:
+    - name: POLYFORM_PORT
+      description: Port for Polyform web UI
+      default: "8080"
+
+dependencies:
+  build:
+    - go
+
+# Project-specific gitignore patterns
+gitignore:
+  patterns:
+    - "/.data/"
+    - "/data/"
+    - ".dist/"
+    - ".test-results/"
+    - ".pc.sock"
